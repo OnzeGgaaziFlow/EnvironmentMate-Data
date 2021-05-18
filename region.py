@@ -15,7 +15,6 @@ import matplotlib.pyplot as plt
 
 pd.set_option('display.max_columns', 15) # 컬럼 숫자 설정, 15
 api_key = 'O9x%2Fz4aw9J5CVY2AIqiXhR%2Bc1ct0L18%2BTxTNTcUWk3bPYvVi3ArLzL1Qlx7pPbRwDZGISzuSLiV51X2m2vUdew%3D%3D' # 공공데이터 포털에서 받은 서비스키 입력
-plt.switch_backend("Agg")
 plt.rc('font', family='Malgun Gothic')
 #%%
 
@@ -77,6 +76,7 @@ def report_table(file_type, tyear, cate, eg_type):
 
 ## 특정 연도의 전체 지역 중 해당 업체가 속한 지역의 에너지 사용량 (총합량)에 대한 분석 결과
 def total_usems_qnty(year, region):
+    plt.switch_backend("Agg")
     data = report_table('xml', str(year), '지역별', 'GHG') # 파일형식, 연도, 구분, 에너지/온실가스
     labels = data.index.to_list()
     print(labels)
@@ -137,13 +137,12 @@ def total_usems_qnty(year, region):
     result = f'{year}년도 전국 온실가스({round(total):,.0f} [GHG]) 대비 {region}는 {region_frequency/total*100:.2f}%의 온실가스({round(region_frequency):,.0f}[GHG])를 배출하고 있습니다.'
     plt.legend(pie[0], labels, loc='upper right')  ## 범례
     plt.savefig(f'region_total_usems_qnty_{year}_{region}.png')
-    # plt.show()
-    # plt.clf()
     return result
 
 
 ## 해당 업체가 속한 지역의 에너지 대비 사용량에 대한 분석 결과
 def industry_usems_qnty_statistics(year, region ,usage):
+    plt.switch_backend("Agg")
     data = report_table('xml', str(year), '지역별', 'GHG') # 파일형식, 연도, 구분, 에너지/온실가스
     ## 데이터 준비
     labels =['동지역 업체', '해당 업체']

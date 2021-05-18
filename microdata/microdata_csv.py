@@ -165,6 +165,6 @@ def micro_data_series_data(id, area, eg_type):
 #############
 
 # micro_data_table
-result = micro_data_table('51CCEC9C57F34E659F58C46CC90A90D37C526FA5', '2018', '제주', 'GHG')
+result = micro_data_series_data('51CCEC9C57F34E659F58C46CC90A90D37C526FA5', '제주', 'GHG')
 print(result)
 # micro_data_series_data('51CCEC9C57F34E659F58C46CC90A90D37C526FA5', '제주', 'GHG')

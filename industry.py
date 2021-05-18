@@ -36,6 +36,7 @@ def url_page(page_n, file_type, year, cate, eg_type):
 #%%
 
 def report_table(file_type, tyear, cate, eg_type):
+
     url = url_page('1', file_type, tyear, cate, eg_type)
     res = requests.get(url) # get 방식으로 페이지 요청
     html = BeautifulSoup(res.text, 'lxml') # 위에 설정한 페이지 읽기
@@ -75,6 +76,7 @@ def report_table(file_type, tyear, cate, eg_type):
     return pv_df
 
 def report_table_origin(file_type, tyear, cate, eg_type):
+    plt.switch_backend("Agg")
     url = url_page('1', file_type, tyear, cate, eg_type)
     res = requests.get(url) # get 방식으로 페이지 요청
     html = BeautifulSoup(res.text, 'lxml') # 위에 설정한 페이지 읽기
@@ -111,6 +113,7 @@ def report_table_origin(file_type, tyear, cate, eg_type):
 
 ## 특정 연도의 전국 업종 중 해당 업종가 속한 지역의 에너지 사용량 (총합량)에 대한 분석 결과
 def total_usems_qnty(year, industry, unit):
+    plt.switch_backend("Agg")
     data = report_table('xml', str(year), '업종별', unit)
     labels = data.index.to_list()
     # print(labels)
@@ -164,16 +167,16 @@ def total_usems_qnty(year, industry, unit):
     result = f'{year}년도 국내 업종 총 온실가스({round(total):,.0f} [{unit}]) 대비 현재 {industry} 업종은 {industry_frequency/total*100:.2f}%의 온실가스({round(industry_frequency):,.0f}[{unit}])를 배출하고 있습니다.'
     plt.legend(pie[0], labels)  ## 범례
     plt.savefig(f'industry_total_usems_qnty_{year}_{industry}.png')
-    # plt.show()
-    # plt.clf()
     return result
 
 
 ## 해당 업체가 속한 업종의 에너지 대비 사용량에 대한 분석 결과
 def industry_usems_qnty_statistics(year, industry ,usage, unit):
+    plt.switch_backend("Agg")
     data = report_table('xml', str(year), '업종별', unit) # 파일형식, 연도, 구분, 에너지/온실가스
     ## 데이터 준비
     labels =['동종 업체', '해당 업체']
+    plt.switch_backend("Agg")
     colors = sns.color_palette('hls',len(labels)) ## 색상
     frequency = [(data.at[industry,'합계']-usage),usage]
     my_frequency = frequency[1]
@@ -227,17 +230,17 @@ def industry_usems_qnty_statistics(year, industry ,usage, unit):
     result = f'{industry} 업종 총 ({round(total):,.0f}[{unit}]) 온실가스 중 해당 업체는 온실가스({round(my_frequency):,.0f}[{unit}]) 배출하고 있습니다.'
     plt.legend(pie[0], labels, loc='upper right')  ## 범례
     plt.savefig(f'my_industry_usems_qnty_{year}_{industry}.png')
-    # plt.show()
-    # plt.clf()
     return result
 
 ## 해당 업체가 속한 업종의 각 에너지 종류 별 사용량에 대한 분석 결과
 def items_usems_qnty_statistics(year, industry , gas, other, oil, coal,thermal,electric, unit):
+    plt.switch_backend("Agg")
     data = report_table_origin('xml', str(year), '업종별', unit) # 파일형식, 연도, 구분, 에너지/온실가스
     data = data.groupby(['세부구분명', '에너지원']).mean()
     labels = data.index.to_list()
     # print(labels)
     # print(data.index)
+    plt.switch_backend("Agg")
     plt.figure(figsize=(15,7))
     same_industry = data.loc[industry][:6].values # 에너지 종류별 사용량
     my_industry = [gas, other, oil, coal,thermal,electric]
@@ -246,24 +249,28 @@ def items_usems_qnty_statistics(year, industry , gas, other, oil, coal,thermal,e
     plt.plot(index_list, my_industry, marker='o', color='g')
     plt.ylabel(f'사용량[{unit}]', fontsize=14)
     plt.xlabel('에너지 종류', fontsize=14)
-    for i, v in enumerate(index_list):
-        plt.text(v, *same_industry[i], *same_industry[i],
-                 fontsize=9,
-                 color='r',
-                 horizontalalignment='center',
-                 verticalalignment='bottom')
-    for i, v in enumerate(index_list):
-        plt.text(v, my_industry[i], my_industry[i],
-                 fontsize=9,
-                 color='b',
-                 horizontalalignment='center',
-                 verticalalignment='bottom')
+    # for i, v in enumerate(index_list):
+    #     plt.text(v, *same_industry[i], *same_industry[i],
+    #              fontsize=9,
+    #              color='r',
+    #              horizontalalignment='center',
+    #              verticalalignment='bottom')
+    # for i, v in enumerate(index_list):
+    #     plt.text(v, my_industry[i], my_industry[i],
+    #              fontsize=9,
+    #              color='b',
+    #              horizontalalignment='center',
+    #              verticalalignment='bottom')
     plt.legend(['동종업체 평균', '해당 기업'], loc='upper right')
     plt.savefig(f'items_usems_qnty_statistics_{year}_{industry}.png')
-    plt.show()
-    return
-
-
+    title_list = []
+    mission_list = []
+    for i in range(6):
+        if same_industry[i] < my_industry[i]:
+            value = int(my_industry[i] - same_industry[i])
+            title_list.append(f'동종업체에 비해 {index_list[i]} 사용량이 {value:,.0f}GHG 이상 많이 배출되고 있습니다.')
+            mission_list.append(f'{index_list[i]} 사용량 {int(my_industry[i]) / 50:,.0f}GHG 감축 미션')
+    return title_list, mission_list
 
 
 #%%
@@ -275,5 +282,6 @@ def items_usems_qnty_statistics(year, industry , gas, other, oil, coal,thermal,e
 ex) ['광업', '그외기타제조업', '비금속광물제품', '섬유제품업', '음식료업', '자동차제조업', '전자장비제조업', '정유', '제1차금속산업', '제조업소계', '펄프종이', '화학']
 """
 # print(total_usems_qnty(2018, '광업', 'GHG'))
-print(industry_usems_qnty_statistics(2018, '광업', 130002, 'GHG'))
-# print(items_usems_qnty_statistics(2018, '광업' , 5000, 150, 70000, 200000,550,200000, 'GHG'))
+# print(industry_usems_qnty_statistics(2018, '광업', 130002, 'GHG'))
+print(items_usems_qnty_statistics(2018, '광업' , 5000, 150, 70000, 200000,550,200000, 'GHG')[0])
+print(items_usems_qnty_statistics(2018, '광업' , 5000, 150, 70000, 200000,550,200000, 'GHG')[1])
