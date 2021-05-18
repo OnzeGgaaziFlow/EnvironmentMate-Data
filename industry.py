@@ -274,7 +274,6 @@ def items_usems_qnty_statistics(year, industry , gas, other, oil, coal,thermal,e
 """
 ex) ['광업', '그외기타제조업', '비금속광물제품', '섬유제품업', '음식료업', '자동차제조업', '전자장비제조업', '정유', '제1차금속산업', '제조업소계', '펄프종이', '화학']
 """
-
-print(total_usems_qnty(2018, '광업', 'GHG'))
+# print(total_usems_qnty(2018, '광업', 'GHG'))
 print(industry_usems_qnty_statistics(2018, '광업', 130002, 'GHG'))
-print(items_usems_qnty_statistics(2018, '광업' , 5000, 150, 70000, 200000,550,200000, 'GHG'))
+# print(items_usems_qnty_statistics(2018, '광업' , 5000, 150, 70000, 200000,550,200000, 'GHG'))

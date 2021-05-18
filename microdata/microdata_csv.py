@@ -164,7 +164,7 @@ def micro_data_table(id, tyear, area, eg_type):
 #############
 
 # micro_data_table
-# result = micro_data_table('51CCEC9C57F34E659F58C46CC90A90D37C526FA5', '2018', '제주', 'GHG')
-# micro_data_series_data('51CCEC9C57F34E659F58C46CC90A90D37C526FA5', '제주', 'GHG')
-data = micro_data('xml', '2018', 'GHG')
-data.to_csv(f'micro_data_test_2018.csv')
+result = micro_data_table('51CCEC9C57F34E659F58C46CC90A90D37C526FA5', '2018', '제주', 'GHG')
+micro_data_series_data('51CCEC9C57F34E659F58C46CC90A90D37C526FA5', '제주', 'GHG')
+# data = micro_data('xml', '2018', 'GHG')
+# data.to_csv(f'micro_data_test_2018.csv')
