@@ -15,6 +15,7 @@ import matplotlib.pyplot as plt
 
 pd.set_option('display.max_columns', 15) # 컬럼 숫자 설정, 15
 api_key = 'O9x%2Fz4aw9J5CVY2AIqiXhR%2Bc1ct0L18%2BTxTNTcUWk3bPYvVi3ArLzL1Qlx7pPbRwDZGISzuSLiV51X2m2vUdew%3D%3D' # 공공데이터 포털에서 받은 서비스키 입력
+plt.switch_backend("Agg")
 plt.rc('font', family='Malgun Gothic')
 #%%
 
@@ -198,6 +199,7 @@ def industry_usems_qnty_statistics(year, region ,usage):
             y = (r/2)*np.sin(np.pi/180*((ang1+ang2)/2)) + center[1] ## 텍스트 y좌표
             ax.text(x,y,text,ha='center',va='center',fontsize=12)
     result = f'{region} 지역 총 ({round(total):,.0f}[GHG]) 온실가스 중 해당 업체는 온실가스({round(my_frequency):,.0f}[GHG]) 배출하고 있습니다.'
+
     plt.legend(pie[0], labels, loc='upper right')  ## 범례
     plt.savefig(f'region_industry_usems_qnty_{year}_{region}.png')
     return result

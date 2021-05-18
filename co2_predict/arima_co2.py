@@ -40,6 +40,7 @@ model_series_trend = tf.keras.models.load_model('./model/model_series_trend.h5')
 # for i in range(48):
 
 def predict():
+    plt.switch_backend("Agg")
     with open('./data/CLM_온실가스_MNH_20210515164253.csv') as csvfile:
         reader = csv.reader(csvfile, delimiter=',')
         next(reader)
@@ -58,7 +59,7 @@ def predict():
         predict_time = []
         result = []
 
-        series_decompose = seasonal_decompose(csv_co2, model='additive', freq=13, )
+        series_decompose = seasonal_decompose(csv_co2, model='additive', period=13, )
         series_resid = np.nan_to_num(series_decompose.resid, copy=False)
         series_trend = np.nan_to_num(series_decompose.trend, copy=False)
         series_seasonal = np.nan_to_num(series_decompose.seasonal, copy=False)
@@ -83,7 +84,6 @@ def predict():
             if month == 12:
                 year += 1
                 month = 1
-
 
         plt.figure(figsize=(10, 6))
         plot_series(csv_times, csv_co2)
