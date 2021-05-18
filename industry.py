@@ -176,7 +176,6 @@ def industry_usems_qnty_statistics(year, industry ,usage, unit):
     data = report_table('xml', str(year), '업종별', unit) # 파일형식, 연도, 구분, 에너지/온실가스
     ## 데이터 준비
     labels =['동종 업체', '해당 업체']
-    plt.switch_backend("Agg")
     colors = sns.color_palette('hls',len(labels)) ## 색상
     frequency = [(data.at[industry,'합계']-usage),usage]
     my_frequency = frequency[1]
@@ -240,7 +239,6 @@ def items_usems_qnty_statistics(year, industry , gas, other, oil, coal,thermal,e
     labels = data.index.to_list()
     # print(labels)
     # print(data.index)
-    plt.switch_backend("Agg")
     plt.figure(figsize=(15,7))
     same_industry = data.loc[industry][:6].values # 에너지 종류별 사용량
     my_industry = [gas, other, oil, coal,thermal,electric]
