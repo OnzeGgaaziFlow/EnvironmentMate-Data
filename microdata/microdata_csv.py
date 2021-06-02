@@ -25,25 +25,6 @@ def url_page(page_n, file_type, year, area, eg_type):
         quote_plus('numOfRows'): '10', # 페이지당 읽는 행 숫자
         quote_plus('apiType'): file_type, # xml/json 중 선택
         quote_plus('q1'): year, # 연도
-        quote_plus('q2'): area, # 지역
-        # quote_plus('q3'): man, # 종사자규모
-        # quote_plus('q4'): ksic, # 표준산업분류 코드
-        # quote_plus('q5'): e_type, # 에너지원
-        quote_plus('serviceKey'): ''
-    }) + api_key
-    # print(api_url + query_params)
-    return api_url + query_params
-
-def url_page(page_n, file_type, year, area, eg_type):
-    if eg_type == 'TOE':
-        api_url = 'http://apis.data.go.kr/B553530/GHG_LIST_04/GHG_LIST_04_02_VIEW'
-    if eg_type == 'GHG':
-        api_url = 'http://apis.data.go.kr/B553530/GHG_LIST_04/GHG_LIST_04_03_VIEW'
-    query_params = '?' + urlencode({
-        quote_plus('pageNo'): page_n, # 페이지 번호
-        quote_plus('numOfRows'): '10', # 페이지당 읽는 행 숫자
-        quote_plus('apiType'): file_type, # xml/json 중 선택
-        quote_plus('q1'): year, # 연도
         quote_plus('q2'): area,  # 지역
         # quote_plus('q3'): man, # 종사자규모
         # quote_plus('q4'): ksic, # 표준산업분류 코드
@@ -149,22 +130,36 @@ def micro_data_table(id, tyear, area, eg_type):
 
 # 사업장 id, 지역, 온실가스 배출 단위를 입력으로 받으면 과거 에너지 소비량에 대한 시계열 데이터를 그래프로 확인할 수 있음. (2010~2018)
 def micro_data_series_data(id, area, eg_type):
-    data = micro_data('xml', str(2015), area, eg_type)
-    for i in range(2016, 2019):
+    region_list = ['강원', '경기', '경남', '경북', '광주', '대구', '대전', '부산', '서울', '전북', '제주', '충남', '충북']
+    if area not in region_list:
+         return False
+    data = micro_data('xml', str(2017), area, eg_type)
+    data = data[data['사업장'] == id]
+    for i in range(2018, 2019):
         try:
             next = micro_data('xml', str(i), area, eg_type)
-            next = next[data['사업장'] == id]
+            next = next[next['사업장'] == id]
             data = data.concat[data,next]
         except:
             continue
+    if len(data) == 0:
+         return False
+
     data.to_csv(f'micro_series_data_{id}.csv')
     return data
+
+# def micro_data_series_graph(id, area):
 
 #############
 #   TEST    #
 #############
 
 # micro_data_table
-result = micro_data_series_data('51CCEC9C57F34E659F58C46CC90A90D37C526FA5', '제주', 'GHG')
-print(result)
+
+#
+# data = micro_data_series_data('51CCEC9C57F34E659F5', '제주', 'GHG')
+data = pd.read_csv('micro_data_test_51CCEC9C57F34E659F58C46CC90A90D37C526FA5_2018.csv')
+col = set(data['에너지원'].values)
+print(col)
+
 # micro_data_series_data('51CCEC9C57F34E659F58C46CC90A90D37C526FA5', '제주', 'GHG')

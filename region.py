@@ -134,7 +134,7 @@ def total_usems_qnty(year, region):
             x = (r/2)*np.cos(np.pi/180*((ang1+ang2)/2)) + center[0] ## 텍스트 x좌표
             y = (r/2)*np.sin(np.pi/180*((ang1+ang2)/2)) + center[1] ## 텍스트 y좌표
             ax.text(x,y,text,ha='center',va='center',fontsize=12)
-    result = f'{year}년도 전국 온실가스({round(total):,.0f} [GHG]) 대비 {region}는 {region_frequency/total*100:.2f}%의 온실가스({round(region_frequency):,.0f}[GHG])를 배출하고 있습니다.'
+    result = f'{year}년도 전국 온실가스({round(total):,.0f} [tCO2eq]) 대비 {region}는 {region_frequency/total*100:.2f}%의 온실가스({round(region_frequency):,.0f}[tCO2eq])를 배출하고 있습니다.'
     plt.legend(pie[0], labels, loc='upper right')  ## 범례
     plt.savefig(f'region_total_usems_qnty_{year}_{region}.png')
     return result
@@ -197,7 +197,7 @@ def industry_usems_qnty_statistics(year, region ,usage):
             x = (r/2)*np.cos(np.pi/180*((ang1+ang2)/2)) + center[0] ## 텍스트 x좌표
             y = (r/2)*np.sin(np.pi/180*((ang1+ang2)/2)) + center[1] ## 텍스트 y좌표
             ax.text(x,y,text,ha='center',va='center',fontsize=12)
-    result = f'{region} 지역 총 ({round(total):,.0f}[GHG]) 온실가스 중 해당 업체는 온실가스({round(my_frequency):,.0f}[GHG]) 배출하고 있습니다.'
+    result = f'{region} 지역 총 ({round(total):,.0f}[tCO2eq]) 온실가스 중 해당 업체는 온실가스({round(my_frequency):,.0f}[tCO2eq]) 배출하고 있습니다.'
 
     plt.legend(pie[0], labels, loc='upper right')  ## 범례
     plt.savefig(f'region_industry_usems_qnty_{year}_{region}.png')
@@ -213,8 +213,6 @@ def industry_usems_qnty_statistics(year, region ,usage):
 ['강원', '경기', '경남', '경북', '광주', '대구', '대전', '부산', '서울', '전북', '제주', '충남', '충북']
 """
 
-print(total_usems_qnty(2018, '서울'))
-print(industry_usems_qnty_statistics(2018,'서울',583972))
-
-
-
+# print(total_usems_qnty(2018, '서울'))
+# print(industry_usems_qnty_statistics(2018,'전남',583972))
+#

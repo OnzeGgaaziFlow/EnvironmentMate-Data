@@ -266,9 +266,11 @@ def items_usems_qnty_statistics(year, industry , gas, other, oil, coal,thermal,e
     for i in range(6):
         if same_industry[i] < my_industry[i]:
             value = int(my_industry[i] - same_industry[i])
-            title_list.append(f'동종업체에 비해 {index_list[i]} 사용량이 {value:,.0f}GHG 이상 많이 배출되고 있습니다.')
-            mission_list.append(f'{index_list[i]} 사용량 {int(my_industry[i]) / 50:,.0f}GHG 감축 미션')
+            title_list.append(f'동종업체에 비해 {index_list[i]} 사용량이 {value:,.0f}tCO2eq 이상 많이 배출되고 있습니다.')
+            mission_list.append(f'{index_list[i]} 사용량 {int(my_industry[i]) / 50:,.0f}tCO2eq 감축 미션')
     return title_list, mission_list
+
+
 
 
 #%%
